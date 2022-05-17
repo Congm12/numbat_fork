@@ -532,6 +532,8 @@ analyze_bulk = function(
             annot_segs()
     }
 
+    fwrite(bulk, 'test_analyze_bulk.tsv.gz', sep = '\t')
+
     # rolling theta estimates
     bulk = annot_theta_roll(bulk)
     

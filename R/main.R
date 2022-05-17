@@ -639,7 +639,7 @@ make_group_bulks = function(groups, count_mat, df_allele, lambdas_ref, gtf, gene
 #' @keywords internal
 run_group_hmms = function(
     bulks, t = 1e-4, gamma = 20, alpha = 1e-4, min_genes = 10,
-    common_diploid = TRUE, diploid_chroms = NULL, allele_only = FALSE, retest = TRUE, run_hmm = TRUE,
+    common_diploid = TRUE, diploid_chroms = NULL, allele_only = FALSE, retest = FALSE, run_hmm = TRUE,
     ncores = NULL, verbose = FALSE, debug = FALSE
 ) {
 
