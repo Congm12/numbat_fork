@@ -460,6 +460,7 @@ viterbi_joint <- function (object, ...){
             )
         }
     }
+    fwrite(nu, glue('viterbi_nu.txt.gz'), sep = '\t')
 
     if (any(is.na(nu))) {
         # fwrite(nu, '~/debug.txt')
