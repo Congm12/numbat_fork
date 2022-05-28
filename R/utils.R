@@ -500,6 +500,36 @@ analyze_bulk = function(
         
     bulk = bulk %>% mutate(mu = fit@coef[1], sig = fit@coef[2])
 
+    ##### my edit #####
+    tmpbulk <- bulk[bulk$CHROM == 1,]
+    tmpbulk = tmpbulk %>% 
+            mutate(state = 
+                run_hmm_mv_inhom(
+                    pAD = pAD,
+                    DP = DP, 
+                    p_s = p_s,
+                    Y_obs = Y_obs, 
+                    lambda_ref = lambda_ref, 
+                    d_total = na.omit(unique(d_obs)),
+                    phi_amp = 2^(logphi_min),
+                    phi_del = 2^(-logphi_min),
+                    mu = mu,
+                    sig = sig,
+                    t = t,
+                    gamma = unique(gamma),
+                    theta_min = theta_min,
+                    prior = prior,
+                    bal_cnv = TRUE,
+                    exp_only = exp_only,
+                    allele_only = allele_only,
+                    classify_allele = classify_allele,
+                    phasing = phasing
+                )
+            )
+    fwrite(bulk, glue('test_analyze_bulk{bulk$sample[1]}.tsv.gz'), sep = '\t')
+    return()
+    ##### end my edit #####
+
     if (run_hmm) {
         bulk = bulk %>% 
             group_by(CHROM) %>%
@@ -532,7 +562,7 @@ analyze_bulk = function(
             annot_segs()
     }
 
-    fwrite(bulk, glue('test_analyze_bulk{bulk$sample[1]}.tsv.gz'), sep = '\t')
+    # fwrite(bulk, glue('test_analyze_bulk{bulk$sample[1]}.tsv.gz'), sep = '\t')
 
     # rolling theta estimates
     bulk = annot_theta_roll(bulk)
