@@ -667,8 +667,9 @@ run_group_hmms = function(
     }
 
     ##### my edits #####
-    bulks <- bulks %>% split(.$sample)
-    bulks %>% analyze_bulk(bulks[bulks$sample==0, ], 
+    list_bulks <- bulks %>% split(.$sample)
+    bulk <- list_bulks[[1]]
+    bulk %>% analyze_bulk(bulk, 
                 t = t,
                 gamma = gamma, 
                 find_diploid = find_diploid, 
