@@ -525,7 +525,11 @@ analyze_bulk = function(
                     classify_allele = classify_allele,
                     phasing = phasing
                 )
-            )
+            )  %>% 
+            mutate(cnv_state = str_remove(state, '_down|_up')) %>%
+            annot_segs() %>%
+            smooth_segs(min_genes = min_genes) %>%
+            annot_segs()
     fwrite(bulk, glue('test_analyze_bulk{bulk$sample[1]}.tsv.gz'), sep = '\t')
     return()
     ##### end my edit #####

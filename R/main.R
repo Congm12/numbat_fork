@@ -668,8 +668,11 @@ run_group_hmms = function(
 
     ##### my edits #####
     list_bulks <- bulks %>% split(.$sample)
-    bulk <- list_bulks[[1]]
-    bulk %>% analyze_bulk(bulk, 
+    results = mclapply(
+        list_bulks[1:1],
+        mc.cores = ncores,
+        function(bulk) {
+            bulk %>% analyze_bulk(
                 t = t,
                 gamma = gamma, 
                 find_diploid = find_diploid, 
@@ -679,6 +682,7 @@ run_group_hmms = function(
                 min_genes = min_genes,
                 retest = retest, 
                 verbose = verbose)
+    })
     exit()
     ##### end my edit #####
 
