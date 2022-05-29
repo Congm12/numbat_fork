@@ -419,6 +419,7 @@ viterbi_joint <- function (object, ...){
     n <- length(x)
     m <- nrow(object$Pi[,,1])
     nu <- matrix(NA, nrow = n, ncol = m)
+    log_emission <- matrix(NA, nrow = n, ncol = m)
     mu <- matrix(NA, nrow = n, ncol = m + 1)
     y <- rep(NA, n)
     
@@ -427,6 +428,7 @@ viterbi_joint <- function (object, ...){
         
     if (!is.na(x[1])) {
         nu[1, ] = nu[1, ] + dfunc(x=x[1], object$pm, getj(object$pn, 1), log = TRUE)
+        log_emission[1, ] = dfunc(x=x[1], object$pm, getj(object$pn, 1), log = TRUE)
     }
     
     if (!is.na(x2[1])) {
@@ -437,7 +439,13 @@ viterbi_joint <- function (object, ...){
             list('mu' = object$mu[1] + log(object$phi * object$d * object$lambda_star[1])),
             log = TRUE
         )
-        
+
+        log_emission[1, ] = log_emission[1, ] + dfunc2(
+            x = rep(x2[1], m),
+            list('sig' = rep(object$sig[1], m)),
+            list('mu' = object$mu[1] + log(object$phi * object$d * object$lambda_star[1])),
+            log = TRUE
+        )
     }
             
     logPi <- log(object$Pi)
@@ -449,6 +457,7 @@ viterbi_joint <- function (object, ...){
             
         if (!is.na(x[i])) {
             nu[i, ] = nu[i, ] + dfunc(x=x[i], object$pm, getj(object$pn, i), log = TRUE)
+            log_emission[i, ] = dfunc(x=x[i], object$pm, getj(object$pn, i), log = TRUE)
         }
         
         if (!is.na(x2[i])) {
@@ -458,9 +467,17 @@ viterbi_joint <- function (object, ...){
                 list('mu' = object$mu[i] + log(object$phi * object$d * object$lambda_star[i])),
                 log = TRUE
             )
+
+            log_emission[i, ] = log_emission[i, ] + dfunc2(
+                x = rep(x2[i], m),
+                list('sig' = rep(object$sig[i], m)),
+                list('mu' = object$mu[i] + log(object$phi * object$d * object$lambda_star[i])),
+                log = TRUE
+            )
         }
     }
     fwrite(nu, glue('viterbi_nu.txt.gz'), sep = '\t')
+    fwrite(log_emission, glue('viterbi_log_emission.txt.gz'), sep = '\t')
 
     if (any(is.na(nu))) {
         # fwrite(nu, '~/debug.txt')
