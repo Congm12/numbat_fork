@@ -478,7 +478,9 @@ viterbi_joint <- function (object, ...){
     }
     fwrite(nu, glue('viterbi_nu.txt.gz'), sep = '\t')
     fwrite(log_emission, glue('viterbi_log_emission.txt.gz'), sep = '\t')
-    fwrite(logPi, glue('viterbi_logPi.txt.gz'), sep = '\t')
+    fwrite(logPi[,,2], glue('viterbi_logPi_2.txt.gz'), sep = '\t')
+    fwrite(logPi[,,11], glue('viterbi_logPi_11.txt.gz'), sep = '\t')
+    fwrite(logPi[,,12], glue('viterbi_logPi_12.txt.gz'), sep = '\t')
 
     if (any(is.na(nu))) {
         # fwrite(nu, '~/debug.txt')
