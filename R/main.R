@@ -669,7 +669,7 @@ run_group_hmms = function(
     ##### my edits #####
     list_bulks <- bulks %>% split(.$sample)
     results = mclapply(
-        list_bulks[1:1],
+        list_bulks[5:5],
         mc.cores = ncores,
         function(bulk) {
             bulk %>% analyze_bulk(
